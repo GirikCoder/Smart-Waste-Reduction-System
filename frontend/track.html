@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Orders - StockTracker</title>
+    <link rel="stylesheet" href="track.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">    
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>StockTracker</h2>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Stock</a>
+                </li>
+                <li class="nav-item">
+                    <a href="track.html" class="nav-link active">Track Order</a>
+                </li>
+                <li class="nav-item">
+                    <a href="inventory.html" class="nav-link">Inventory</a>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <div class="header-section">
+            <h1>Track Orders</h1>
+            <p>Monitor all your reorder requests and delivery status</p>
+        </div>
+
+        <!-- Orders Table -->
+        <div class="table-container">
+            <div class="table-header">
+                <h3>Active Orders</h3>
+                <div class="filters">
+                    <select id="statusFilter" class="filter-select">
+                        <option value="">All Orders</option>
+                        <option value="pending">Pending</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="shipped">Shipped</option>
+                        <option value="delivered">Delivered</option>
+                    </select>
+                    <input type="text" id="searchInput" placeholder="Search orders..." class="search-input">
+                </div>
+            </div>
+            
+            <div class="table-wrapper">
+                <table class="orders-table" id="ordersTable">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Item Details</th>
+                            <th>Supplier</th>
+                            <th>Quantity</th>
+                            <th>Order Date</th>
+                            <th>Expected Delivery</th>
+                            <th>Status</th>
+                            <th>Priority</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody">
+                        <!-- Dynamic content will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="empty-state" style="display: none;">
+            <div class="empty-icon">📦</div>
+            <h3>No Orders Found</h3>
+            <p>You haven't placed any orders yet. Go to Stock page to reorder items.</p>
+            <a href="index.html" class="btn btn-primary">Go to Stock</a>
+        </div>
+    </main>
+
+    <!-- Order Details Modal -->
+    <div id="modalOverlay" class="modal-overlay">
+        <div id="orderDetailsModal" class="modal">
+            <div class="modal-header">
+                <h3>Order Details</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="order-info">
+                    <div class="info-row">
+                        <label>Order ID:</label>
+                        <span id="detailOrderId"></span>
+                    </div>
+                    <div class="info-row">
+                        <label>Item ID:</label>
+                        <span id="detailItemId"></span>
+                    </div>
+                    <div class="info-row">
+                        <label>Item Name:</label>
+                        <span id="detailItemName"></span>
+                    </div>
+                    <div class="info-row">
+                        <label>Type:</label>
+                        <span id="detailItemType"></span>
+                    </div>
+                    <div class="info-row">
+                        <label>Price per Unit:</label>
+                        <span id="detailItemPrice"></span>
+                    </div>
+                    <div class="info-row">
+                        <label>Quantity Ordered:</label>
+                        <span id="detailQuantity"></span>
+                    </div>
+                    <div class="info-row">
+                        <label>Total Cost:</label>
+                        <span id="detailTotalCost"></span>
+                    </div>
+                    <div class="info-row">
+                        <label>Supplier:</label>
+                        <span id="detailSupplier"></span>
+                    </div>
+                    <div class="info-row">
+                        <label>Order Date:</label>
+                        <span id="detailOrderDate"></span>
+                    </div>
+                    <div class="info-row">
+                        <label>Expected Delivery:</label>
+                        <span id="detailDeliveryDate"></span>
+                    </div>
+                    <div class="info-row">
+                        <label>Priority:</label>
+                        <span id="detailPriority"></span>
+                    </div>
+                    <div class="info-row">
+                        <label>Status:</label>
+                        <span id="detailStatus"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success/Error Messages -->
+    <div id="messageContainer" class="message-container"></div>
+
+    <script src="track.js"></script>
+</body>
+</html>

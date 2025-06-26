@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management - StockTracker</title>
+    <link rel="stylesheet" href="inventory.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>StockTracker</h2>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Stock</a>
+                </li>
+                <li class="nav-item">
+                    <a href="track.html" class="nav-link">Track Order</a>
+                </li>
+                <li class="nav-item">
+                    <a href="inventory.html" class="nav-link active">Inventory</a>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <div class="header-section">
+            <h1>Inventory Management</h1>
+            <p>Complete overview of all warehouse stock with expiry tracking and management actions</p>
+        </div>
+
+        <!-- Inventory Stats -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-icon">📦</div>
+                <div class="stat-info">
+                    <h3 id="totalItems">0</h3>
+                    <p>Total Items</p>
+                </div>
+            </div>
+            <div class="stat-card expired">
+                <div class="stat-icon">⚠️</div>
+                <div class="stat-info">
+                    <h3 id="expiredItems">0</h3>
+                    <p>Expired Items</p>
+                </div>
+            </div>
+            <div class="stat-card warning">
+                <div class="stat-icon">⏰</div>
+                <div class="stat-info">
+                    <h3 id="expiringItems">0</h3>
+                    <p>Expiring Soon</p>
+                </div>
+            </div>
+            <div class="stat-card low-stock">
+                <div class="stat-icon">📉</div>
+                <div class="stat-info">
+                    <h3 id="lowStockItems">0</h3>
+                    <p>Low Stock</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inventory Table -->
+        <div class="table-container">
+            <div class="table-header">
+                <h3>Complete Inventory</h3>
+                <div class="filters">
+                    <select id="typeFilter" class="filter-select">
+                        <option value="">All Types</option>
+                        <option value="produce">Produce</option>
+                        <option value="canned-goods">Canned Goods</option>
+                        <option value="meat">Meat</option>
+                        <option value="bakery">Bakery</option>
+                        <option value="snacks">Snacks</option>
+                        <option value="dairy">Dairy</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="clothing">Clothing</option>
+                        <option value="medicine">Medicine</option>
+                    </select>
+                    <select id="statusFilter" class="filter-select">
+                        <option value="">All Status</option>
+                        <option value="expired">Expired</option>
+                        <option value="expiring">Expiring Soon</option>
+                        <option value="low-stock">Low Stock</option>
+                        <option value="good">Good</option>
+                    </select>
+                    <input type="text" id="searchInput" placeholder="Search inventory..." class="search-input">
+                </div>
+            </div>
+            
+            <div class="table-wrapper">
+                <table class="inventory-table" id="inventoryTable">
+                    <thead>
+                        <tr>
+                            <th>Item ID</th>
+                            <th>Item Name</th>
+                            <th>Type</th>
+                            <th>Price</th>
+                            <th>Expiry Date</th>
+                            <th>Quantity</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventoryTableBody">
+                        <!-- Dynamic content will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Reorder Modal -->
+    <div id="modalOverlay" class="modal-overlay">
+        <div id="reorderModal" class="modal">
+            <div class="modal-header">
+                <h3>Reorder Items</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Item Name:</label>
+                    <input type="text" id="reorderItemName" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Current Stock:</label>
+                    <input type="number" id="reorderCurrentStock" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Reorder Quantity:</label>
+                    <input type="number" id="reorderQty" min="1" placeholder="Enter quantity to reorder">
+                </div>
+                <div class="form-group">
+                    <label>Supplier:</label>
+                    <select id="reorderSupplier">
+                        <option value="">Select Supplier</option>
+                        <option value="Supplier A">Supplier A</option>
+                        <option value="Supplier B">Supplier B</option>
+                        <option value="Supplier C">Supplier C</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Expected Delivery:</label>
+                    <input type="date" id="reorderDelivery">
+                </div>
+                <div class="form-group">
+                    <label>Priority:</label>
+                    <select id="reorderPriority">
+                        <option value="normal">Normal</option>
+                        <option value="high">High</option>
+                        <option value="urgent">Urgent</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="processReorder()">Place Reorder</button>
+            </div>
+        </div>
+
+        <!-- Discard Modal -->
+        <div id="discardModal" class="modal">
+            <div class="modal-header">
+                <h3>Discard Items</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Item Name:</label>
+                    <input type="text" id="discardItemName" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Available Quantity:</label>
+                    <input type="number" id="discardAvailableQty" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Quantity to Discard:</label>
+                    <input type="number" id="discardQty" min="1" placeholder="Enter quantity">
+                </div>
+                <div class="form-group">
+                    <label>Reason for Discard:</label>
+                    <select id="discardReason">
+                        <option value="">Select Reason</option>
+                        <option value="expired">Expired</option>
+                        <option value="damaged">Damaged</option>
+                        <option value="quality">Quality Issues</option>
+                        <option value="contaminated">Contaminated</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Additional Notes:</label>
+                    <textarea id="discardNotes" placeholder="Additional details..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-danger" onclick="processDiscard()">Confirm Discard</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success/Error Messages -->
+    <div id="messageContainer" class="message-container"></div>
+
+    <script src="inventory.js"></script>
+</body>
+</html>
